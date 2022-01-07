@@ -26,7 +26,7 @@ public class ResourceManager : MonoBehaviour
         {
             if (ItemManager.Instance.GetItemById(0) != null)
             {
-                SpawnResources();
+                //SpawnResources();
                 initialSpawn = false;
             }
         }

@@ -54,7 +54,7 @@ public class UiManager : MonoBehaviour
         foreach(KeyValuePair<ItemData, int> item in items)
         {
             GameObject slot = _slots[slot_index++];
-            slot.GetComponent<Image>().sprite = item.Key.Sprite;
+            slot.GetComponent<Image>().sprite = Resources.Load<Sprite>(item.Key.Sprite);
             slot.transform.GetChild(0).gameObject.GetComponent<Text>().text = item.Value.ToString();
         }
     }

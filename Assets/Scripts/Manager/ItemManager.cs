@@ -1,6 +1,9 @@
 ﻿using Assets.Scripts.Entity.Item;
+using Assets.Scripts.Factories;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +15,7 @@ namespace Assets.Scripts.Manager
     {
         public static ItemManager Instance;
 
-        Dictionary<int, ItemData> _itemList = new Dictionary<int, ItemData>();
+        SortedDictionary<int, ItemData> _itemList = new SortedDictionary<int, ItemData>();
 
         private void Awake()
         {
@@ -24,19 +27,11 @@ namespace Assets.Scripts.Manager
 
         private void Start()
         {
-            CreateItemList();
+            LoadItems();
         }
 
 
 
-        private void CreateItemList()
-        {
-            _itemList.Add(0, new ItemData(0, "wood", ResourceType.wood));
-            _itemList.Add(1, new ItemData(1, "stone", ResourceType.stone));
-            _itemList.Add(2, new ItemData(2, "clay", ResourceType.clay));
-            _itemList.Add(3, new ItemData(3, "grass", ResourceType.grass));
-            _itemList.Add(4, new ItemData(4, "leaves", ResourceType.leaves));
-        }
 
         public ItemData GetItemById(int id)
         {
@@ -46,5 +41,56 @@ namespace Assets.Scripts.Manager
         }
 
         public bool ItemWithIdExists(int id) { return _itemList.ContainsKey(id); }
+
+
+        public SortedDictionary<int, ItemData> GetAllItems()
+        {
+            return _itemList;
+        }
+
+        public void UpdateItems(SortedDictionary<int, ItemData> updatedItemList)
+        {
+            _itemList = updatedItemList;
+        }
+
+        public void SaveItems()
+        {
+            string json = JsonConvert.SerializeObject(_itemList.Values, Formatting.Indented);
+
+            // serialize JSON to a string and then write string to a file
+            File.WriteAllText(@"D:\Unity Workspace\BasicRpg\Assets\Json\itemList.json", json);
+        }
+
+        public void LoadItems()
+        {
+            List<ItemData> items = JsonConvert.DeserializeObject<List<ItemData>>(File.ReadAllText(@"D:\Unity Workspace\BasicRpg\Assets\Json\itemList.json"));
+            foreach(ItemData item in items)
+            {
+                _itemList[item.Id] = item;
+            }
+        }
+
+        public void RegisterItem(ItemData newItem)
+        {
+            int newId = _itemList.Count == 0 ? 0 : _itemList.Last().Key+1;
+            newItem.Id = (newId);
+            _itemList.Add(newId, newItem);
+
+            foreach(KeyValuePair<int, ItemData> keyValuePair in _itemList)
+            {
+                int id = keyValuePair.Key;
+                ItemData it = keyValuePair.Value;
+                string itemText = $"ID: {id} Name: {it.Name} Sprite: {it.Sprite} Durability: {it.Durability} ResourceType: {it.ResourceType}";
+                string lines = new string('-', itemText.Length);
+                Debug.Log(lines);
+                Debug.Log(itemText);
+                foreach(ItemType itemType in it.ItemTypes)
+                {
+                    Debug.Log($"Type: {itemType.ToString()}");
+                }
+
+                Debug.Log(lines);
+            }
+        }
     }
 }
