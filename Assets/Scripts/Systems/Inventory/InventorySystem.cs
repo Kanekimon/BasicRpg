@@ -139,6 +139,18 @@ public class InventorySystem : MonoBehaviour
         return false;
     }
 
+
+    /// <summary>
+    /// Checks if the inventory has an item with a specific amount
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="amount"></param>
+    /// <returns></returns>
+    public bool HasItemWithAmount(int id, int amount)
+    {
+        return HasItem(id) && GetItemAmount(id) >= amount;
+    }
+
     /// <summary>
     /// Get ItemData from Id
     /// </summary>
@@ -164,6 +176,10 @@ public class InventorySystem : MonoBehaviour
         inv.AddItemToInventory(itemFromInventory.Item1, itemFromInventory.Item2);
     }
 
+    /// <summary>
+    /// Transfers all of the first item to another inventory
+    /// </summary>
+    /// <param name="inv">The inventory to transfer to</param>
     public void TransferAllOfFirstItem(InventorySystem inv)
     {
         KeyValuePair<ItemData, int> invItem = this._inventoryItems.First();
@@ -173,11 +189,32 @@ public class InventorySystem : MonoBehaviour
         inv.AddItemToInventory(itemFromInventory.Item1, itemFromInventory.Item2);
     }
 
+    /// <summary>
+    /// Transfers all items from this inventory to another
+    /// </summary>
+    /// <param name="inv">The target inventory</param>
+    public void TransferAllToOtherInventory(InventorySystem inv)
+    {
+        foreach(KeyValuePair<ItemData, int> invItem in _inventoryItems)
+        {
+            inv.AddItemToInventory(invItem.Key, invItem.Value);
+        }
+        _inventoryItems.Clear();
+    }
+
+    /// <summary>
+    /// Check if inventory is empty
+    /// </summary>
+    /// <returns>true if empty</returns>
     public bool IsInventoryEmpty()
     {
         return _inventoryItems.Count == 0;
     }
 
+    /// <summary>
+    /// Returns collection of all items in inventory
+    /// </summary>
+    /// <returns></returns>
     public Dictionary<ItemData, int> GetAllItems()
     {
         return this._inventoryItems;

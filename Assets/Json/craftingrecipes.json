@@ -1,0 +1,16 @@
+[
+  {
+    "ResultId": 6,
+    "Amount": 1,
+    "Resources": [
+      {
+        "ItemId": 0,
+        "Amount": 2
+      },
+      {
+        "ItemId": 1,
+        "Amount": 3
+      }
+    ]
+  }
+]

@@ -30,6 +30,11 @@ public class ResourceManager : MonoBehaviour
                 initialSpawn = false;
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            SpawnResources();
+        }
     }
 
     public void SpawnResources()

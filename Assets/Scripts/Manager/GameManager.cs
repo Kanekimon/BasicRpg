@@ -1,3 +1,4 @@
+using Assets.Scripts.Player;
 using Assets.Scripts.Systems.Attributes;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,10 +37,16 @@ public class GameManager : MonoBehaviour
         {
             _player.GetComponent<AttributeSystem>().IncreaseAttributeValue("health", 10f);
         }
+
     }
 
     public GameObject GetPlayer()
     {
         return _player;
+    }
+
+    public void ToggleCursor(CursorLockMode mode)
+    {
+        MouseLook.Instance.ChangeLockState(mode);
     }
 }

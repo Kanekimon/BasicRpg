@@ -58,5 +58,14 @@ namespace Assets.Scripts.Player
             return val * mouseSensitivity * Time.deltaTime;
         }
 
+        public void ChangeLockState(CursorLockMode mode)
+        {
+            Cursor.lockState = mode;
+            if (mode == CursorLockMode.Locked)
+                IsLocked = true;
+            else
+                IsLocked = false;
+        }
+
     }
 }

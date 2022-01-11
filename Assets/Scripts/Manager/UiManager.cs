@@ -1,7 +1,11 @@
 using Assets.Scripts.Entity.Item;
+using Assets.Scripts.Manager;
+using Assets.Scripts.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class UiManager : MonoBehaviour
@@ -9,11 +13,13 @@ public class UiManager : MonoBehaviour
     public static UiManager Instance;
 
     public RectTransform inventory;
+    public RectTransform crafting;
 
+
+
+    public List<RectTransform> windows = new List<RectTransform>();
 
     private InventorySystem _inventorySystem;
-    private List<GameObject> _slots = new List<GameObject>();
-
     private void Awake()
     {
         if (Instance == null)
@@ -26,12 +32,6 @@ public class UiManager : MonoBehaviour
     void Start()
     {
 
-        Transform slotContainer = inventory.transform.Find("Inventory_Items");
-        foreach(Transform slot in slotContainer)
-        {
-            _slots.Add(slot.gameObject);
-        }
-        _inventorySystem = GameManager.Instance.GetPlayer().GetComponent<InventorySystem>();
     }
 
     // Update is called once per frame
@@ -39,23 +39,24 @@ public class UiManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.I))
         {
-            inventory.gameObject.SetActive(!inventory.gameObject.activeInHierarchy);
-            if (inventory.gameObject.activeInHierarchy)
-            {
-                DrawItems(GameManager.Instance.GetPlayer().GetComponent<InventorySystem>().GetAllItems());
-            }
+            WindowManager.Instance.OpenWindow("Inventory");
         }
-    }
-
-    private void DrawItems(Dictionary<ItemData, int> items)
-    {
-
-        int slot_index = 0;
-        foreach(KeyValuePair<ItemData, int> item in items)
+        if (Input.GetKeyDown(KeyCode.O))
         {
-            GameObject slot = _slots[slot_index++];
-            slot.GetComponent<Image>().sprite = Resources.Load<Sprite>(item.Key.Sprite);
-            slot.transform.GetChild(0).gameObject.GetComponent<Text>().text = item.Value.ToString();
+            WindowManager.Instance.OpenWindow("Crafting");
         }
+
     }
+
+    private RectTransform GetWindow(string name)
+    {
+        foreach (RectTransform rect in windows)
+        {
+            if (rect.name.Equals(name))
+                return rect;
+        }
+        return null;
+    }
+
+
 }
