@@ -21,12 +21,12 @@ using Assets.Scripts.Manager;
 
             ItemData item = ItemManager.Instance.GetItemById(Random.Range(0, 5));
             res.SetType(item.ResourceType);
-            res.GetComponent<InventorySystem>().AddItemToInventory(item, Random.Range(0, 100));
+            //res.GetComponent<InventorySystem>().AddItemToInventory(item, Random.Range(0, 100));
         }
 
         if(GUILayout.Button("Output Inventory"))
         {
-            res.GetComponent<InventorySystem>().OutputInventory();
+            //res.GetComponent<InventorySystem>().OutputInventory();
         }
     }
 }

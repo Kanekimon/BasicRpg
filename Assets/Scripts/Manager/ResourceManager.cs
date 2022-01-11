@@ -29,12 +29,12 @@ public class ResourceManager : MonoBehaviour
                 //SpawnResources();
                 initialSpawn = false;
             }
+
+
         }
 
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            SpawnResources();
-        }
+
+
     }
 
     public void SpawnResources()

@@ -24,7 +24,7 @@ namespace Assets.Scripts.Entity.Resource
             this.gameObject.GetComponent<InventorySystem>().TransferAllOfFirstItem(interactinWith.GetComponent<InventorySystem>());
             if (this.GetComponent<InventorySystem>().IsInventoryEmpty())
                 Destroy(this.gameObject);
-            
+
         }
 
         public void SetType(ResourceType pType)
