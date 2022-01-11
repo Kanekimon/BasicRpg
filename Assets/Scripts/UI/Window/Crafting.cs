@@ -74,7 +74,9 @@ namespace Assets.Scripts.UI.Window
                 AddCraftingResource(resContainer, res.Amount, ItemManager.Instance.GetItemById(res.ItemId));
             }
 
-            prev.Find("ButtonGroup").Find("Craft").GetComponent<Button>().onClick.AddListener(() =>
+            Button craftButton = prev.Find("ButtonGroup").Find("Craft").GetComponent<Button>();
+            craftButton.onClick.RemoveAllListeners();
+            craftButton.onClick.AddListener(() =>
             {
                 GameManager.Instance.GetPlayer().GetComponent<CraftingSystem>().CraftItem(item.Id);
             });

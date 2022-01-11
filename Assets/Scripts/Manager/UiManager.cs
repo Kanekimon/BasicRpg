@@ -58,5 +58,15 @@ public class UiManager : MonoBehaviour
         return null;
     }
 
+    public GameObject GetCanvas()
+    {
+        return GameObject.Find("Canvas");
+    }
+
+    public GameObject GetNotificationContainer()
+    {
+        return GameObject.Find("NotificationContainer");
+    }
+
 
 }

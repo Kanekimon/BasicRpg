@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Entity.Item;
+using Assets.Scripts.Enums;
 using Assets.Scripts.Manager;
 using System;
 using System.Collections.Generic;
@@ -41,10 +42,11 @@ namespace Assets.Scripts.Systems.Crafting
 
                 ItemData itemData = ItemManager.Instance.GetItemById(itemid);
                 _inv.AddItemToInventory(itemData, recipe.Amount);
+                NotificationManager.Instance.ShowNotification($"Successfully crafted {recipe.Amount}x {itemData.Name}", NotificationType.success);
             }
             else
             {
-                Debug.Log("Missing resources");
+                NotificationManager.Instance.ShowNotification("Not enough resources", NotificationType.error);
             }
         }
 
