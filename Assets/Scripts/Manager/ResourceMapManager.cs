@@ -82,21 +82,21 @@ namespace Assets.Scripts.Manager
                     continue;
 
                 int size = reg.colorCord.Count;
-                int maxSpawns = (int)(((float)size / 100) * 30);
+                int maxSpawns = (int)(((float)size / 100)*3);
                 int spawnCount = 0;
                 while(spawnCount < maxSpawns)
                 {
                     KeyValuePair<Vector2, Color> point = reg.colorCord.ElementAt(UnityEngine.Random.Range(0, reg.colorCord.Count));
                     Vector3 spawnPoint = new Vector3(point.Key.x, 0, point.Key.y);
                     spawnPoint.y = Terrain.activeTerrain.SampleHeight(spawnPoint);
-                    if(SpawnResourceOfColor(point.Value, spawnPoint))
+                    if(SpawnResourceOfColor(point.Value, spawnPoint, regionObject))
                         spawnCount++;
                 }
 
             }
         }
 
-        private bool SpawnResourceOfColor(Color c, Vector3 coord)
+        private bool SpawnResourceOfColor(Color c, Vector3 coord, GameObject newParent)
         {
             float decider = UnityEngine.Random.Range(0f, 1f);
 
@@ -120,11 +120,11 @@ namespace Assets.Scripts.Manager
                 mode = "b";
             }
             if (!string.IsNullOrEmpty(mode))
-                return SpawnResource(mode, c, coord);
+                return SpawnResource(mode, c, coord, newParent);
             return false;
         }
 
-        private bool SpawnResource(string c, Color color, Vector3 coord)
+        private bool SpawnResource(string c, Color color, Vector3 coord, GameObject newParent)
         {
             int prob = UnityEngine.Random.Range(0, 101);
             if (prob < (int)(color.a * 100))
@@ -137,7 +137,7 @@ namespace Assets.Scripts.Manager
                 GameObject res = Instantiate(possibleSpawns[index]);
 
                 res.transform.position = coord;
-                res.transform.parent = _resourceContainer.transform;
+                res.transform.parent = newParent.transform;
                 greenObject++;
                 spawned.Add(res);
                 return true;
@@ -189,10 +189,10 @@ namespace Assets.Scripts.Manager
 
             while (connectedPoints.Count > 0)
             {
-                AddConnectedPoints(connectedPoints, colorMap, x, z);
-                Vector2 conPoint = connectedPoints[0];
-                regionMap[(int)connectedPoints.First().x, (int)connectedPoints.First().y] = 1;
-                region.colorCord[conPoint] = colorMap[(int)conPoint.x, (int)conPoint.y];
+                Vector2 current = connectedPoints.First();
+                AddConnectedPoints(connectedPoints, colorMap, (int)current.x, (int)current.y);
+                regionMap[(int)current.x, (int)current.y] = 1;
+                region.colorCord[current] = colorMap[(int)current.x, (int)current.y];
 
                 connectedPoints.RemoveAt(0);
             }
@@ -201,14 +201,29 @@ namespace Assets.Scripts.Manager
 
         void AddConnectedPoints(List<Vector2> con, Color[,] colorMap, int x, int z)
         {
-            if (IsInBounds(x + 1, z, colorMap) && HasColor(colorMap[x + 1, z]) && !InRegionMap(regionMap, x + 1, z))
+            if (IsValidPoint((x+1),z, colorMap, con))
                 con.Add(new Vector2(x + 1, z));
-            if (IsInBounds(x - 1, z, colorMap) && HasColor(colorMap[x - 1, z]) && !InRegionMap(regionMap, x - 1, z))
+            if (IsValidPoint((x - 1), z, colorMap, con))
                 con.Add(new Vector2(x - 1, z));
-            if (IsInBounds(x, z + 1, colorMap) && HasColor((Color)colorMap[x, z + 1]) && !InRegionMap(regionMap, x, z + 1))
+            if (IsValidPoint(x, (z+1), colorMap, con))
                 con.Add(new Vector2(x, z + 1));
-            if (IsInBounds(x, z - 1, colorMap) && HasColor((Color)colorMap[x, z - 1]) && !InRegionMap(regionMap, x, z - 1))
+            if (IsValidPoint(x, (z - 1), colorMap, con))
                 con.Add(new Vector2(x, z - 1));
+        }
+
+
+        bool IsValidPoint(int x, int z, Color[,] colorMap, List<Vector2> connected)
+        {
+            bool valid = true;
+
+            if (!IsInBounds(x, z, colorMap))
+                return false;
+
+            valid &= !connected.Any(a => Vector2.Distance(a, new Vector2(x, z)) == 0);
+            valid &= !InRegionMap(regionMap, x, z);
+            valid &= HasColor(colorMap[x, z]);
+
+            return valid;
         }
            
 
