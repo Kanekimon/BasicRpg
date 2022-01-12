@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1631074897177238315}
   - component: {fileID: 1631074897177238314}
   - component: {fileID: 1631074897177238326}
-  - component: {fileID: 3756842383204367125}
   m_Layer: 0
   m_Name: Leaves
   m_TagString: Untagged
@@ -113,16 +112,7 @@ MonoBehaviour:
   interactionType: 0
   prefab: {fileID: 0}
   _type: 16
---- !u!114 &3756842383204367125
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1631074897177238317}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7232e6b8800be3842869c4550f446d29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _inventorySize: 10
+  resources:
+  - itemId: 4
+    min: 1
+    max: 3

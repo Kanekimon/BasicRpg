@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Scripts.Manager;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,7 @@ namespace Assets.Scripts.Entity.Resource
         private ResourceType _type;
 
         public ResourceType Type { get { return _type; } }
+        public List<ResourceItem> resources = new List<ResourceItem>();
 
         public override string GetDescription()
         {
@@ -21,10 +23,16 @@ namespace Assets.Scripts.Entity.Resource
 
         public override void Interact(GameObject interactinWith)
         {
-            this.gameObject.GetComponent<InventorySystem>().TransferAllOfFirstItem(interactinWith.GetComponent<InventorySystem>());
-            if (this.GetComponent<InventorySystem>().IsInventoryEmpty())
-                Destroy(this.gameObject);
-
+            InventorySystem inv = interactinWith.GetComponent<InventorySystem>();
+            if(inv != null)
+            {
+                foreach(ResourceItem item in resources)
+                {
+                    int randomAmount = UnityEngine.Random.Range(item.min, item.max+1);
+                    inv.AddItemToInventory(ItemManager.Instance.GetItemById(item.itemId), randomAmount);
+                }
+            }
+            Destroy(this.gameObject);
         }
 
         public void SetType(ResourceType pType)
@@ -33,5 +41,13 @@ namespace Assets.Scripts.Entity.Resource
         }
 
 
+    }
+
+    [System.Serializable]
+    public class ResourceItem
+    {
+        public int itemId;
+        public int min;
+        public int max;
     }
 }

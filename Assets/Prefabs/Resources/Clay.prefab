@@ -11,6 +11,22 @@ PrefabInstance:
       propertyPath: _type
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 5681903370675420065, guid: 46f21a00470b6e34f9f2363fff46b0b8, type: 3}
+      propertyPath: resources.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5681903370675420065, guid: 46f21a00470b6e34f9f2363fff46b0b8, type: 3}
+      propertyPath: resources.Array.data[0].max
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5681903370675420065, guid: 46f21a00470b6e34f9f2363fff46b0b8, type: 3}
+      propertyPath: resources.Array.data[0].min
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5681903370675420065, guid: 46f21a00470b6e34f9f2363fff46b0b8, type: 3}
+      propertyPath: resources.Array.data[0].itemId
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5681903370675420090, guid: 46f21a00470b6e34f9f2363fff46b0b8, type: 3}
       propertyPath: m_Name
       value: Clay
@@ -63,5 +79,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 46f21a00470b6e34f9f2363fff46b0b8, type: 3}
