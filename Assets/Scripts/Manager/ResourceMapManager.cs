@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Assets.Scripts.Data;
+using Assets.Scripts.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,18 +13,23 @@ namespace Assets.Scripts.Manager
     public class ResourceMapManager : MonoBehaviour
     {
 
-        Texture2D texture;
+        public Texture2D texture;
         public List<GameObject> redPrefabs = new List<GameObject>();
         public List<GameObject> greenPrefabs = new List<GameObject>();
         public List<GameObject> bluePrefabs = new List<GameObject>();
 
-        public int[,] regionMap;
+        public List<ColorRegionData> sections = new List<ColorRegionData>();
 
-        int recDepth = 0;
+        public int[,] regionMap;
         public int greenObject = 0;
         public int maxResources = 10000;
+        [Range(0,100f)]
+        public float regionSpawnPercentage = 0f;
 
-        Dictionary<string, List<GameObject>> map = new Dictionary<string, List<GameObject>>();
+
+        public Color[,] colorMap;
+
+        public Dictionary<string, List<GameObject>> map = new Dictionary<string, List<GameObject>>();
         private List<SpawnRegion> regions = new List<SpawnRegion>();
         List<GameObject> spawned = new List<GameObject>();
         private GameObject _resourceContainer;
@@ -60,14 +67,11 @@ namespace Assets.Scripts.Manager
             _resourceContainer = new GameObject("ResourceContainer");
 
             Color[] colorArray = texture.GetPixels();
-            Color[,] colorMap = To2DArray(colorArray);
+            colorMap = To2DArray(colorArray);
             regionMap = new int[colorMap.GetLength(0), colorMap.GetLength(1)];
             regions = new List<SpawnRegion>();
             DrawRegions(colorMap);
             PopulateRegions();
-
-
-
         }
 
         private void PopulateRegions()
@@ -82,15 +86,15 @@ namespace Assets.Scripts.Manager
                     continue;
 
                 int size = reg.colorCord.Count;
-                int maxSpawns = (int)(((float)size / 100)*3);
+                int maxSpawns = (int)((float)size * (regionSpawnPercentage/100));
                 int spawnCount = 0;
                 while(spawnCount < maxSpawns)
                 {
                     KeyValuePair<Vector2, Color> point = reg.colorCord.ElementAt(UnityEngine.Random.Range(0, reg.colorCord.Count));
                     Vector3 spawnPoint = new Vector3(point.Key.x, 0, point.Key.y);
                     spawnPoint.y = Terrain.activeTerrain.SampleHeight(spawnPoint);
-                    if(SpawnResourceOfColor(point.Value, spawnPoint, regionObject))
-                        spawnCount++;
+                    SpawnResourceOfColor(point.Value, spawnPoint, regionObject);
+                    spawnCount++;
                 }
 
             }
@@ -129,12 +133,22 @@ namespace Assets.Scripts.Manager
             int prob = UnityEngine.Random.Range(0, 101);
             if (prob < (int)(color.a * 100))
             {
+                GameObject toSpawn = null;
 
-                List<GameObject> possibleSpawns = map[c];
+                switch (c)
+                {
+                    case "r":
+                        toSpawn = GetSectionResource(sections[0].LoadData(), color.r);
+                        break;
+                    case "g":
+                        toSpawn = GetSectionResource(sections[0].LoadData(), color.g);
+                        break;
+                    case "b":
+                        toSpawn = GetSectionResource(sections[0].LoadData(), color.b);
+                        break;
+                }
 
-                int index = UnityEngine.Random.Range(0, possibleSpawns.Count);
-
-                GameObject res = Instantiate(possibleSpawns[index]);
+                GameObject res = Instantiate(toSpawn);
 
                 res.transform.position = coord;
                 res.transform.parent = newParent.transform;
@@ -146,6 +160,26 @@ namespace Assets.Scripts.Manager
             {
                 return false;
             }
+        }
+
+        public GameObject GetSectionResource(List<SectionObject> secs, float value)
+        {
+            value = Converter.ConvertToNormalColorValue(value);
+            SectionObject selected = null;
+            foreach(SectionObject sec in secs)
+            {
+                if (selected == null && sec.ColorValue < value)
+                    selected = sec;
+
+                if (sec.ColorValue < value && selected.ColorValue < sec.ColorValue)
+                    selected = sec;
+            }
+            return selected.Prefab;
+        }
+
+        public List<SpawnRegion> GetRegions()
+        {
+            return regions;
         }
 
         private void DrawRegions(Color[,] colorMap)
@@ -169,10 +203,6 @@ namespace Assets.Scripts.Manager
                             CreateNewRegion(colorMap,x, z);
                         }
                     }
-                    else
-                    {
-                        Debug.Log("is already filled out");
-                    }
                 }
             }
 
@@ -193,7 +223,6 @@ namespace Assets.Scripts.Manager
                 AddConnectedPoints(connectedPoints, colorMap, (int)current.x, (int)current.y);
                 regionMap[(int)current.x, (int)current.y] = 1;
                 region.colorCord[current] = colorMap[(int)current.x, (int)current.y];
-
                 connectedPoints.RemoveAt(0);
             }
 
@@ -234,7 +263,7 @@ namespace Assets.Scripts.Manager
 
         private bool HasColor(Color c)
         {
-            return c.r != 0 || c.g != 0 || c.b != 0;
+            return (c.r != 0 || c.g != 0 || c.b != 0) && c.a > 0;
         }
 
         private bool InRegionMap(int[,] regionmap, int x, int z)
