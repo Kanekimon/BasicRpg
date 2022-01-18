@@ -17,6 +17,9 @@ namespace Assets.Scripts.Manager
         public List<GameObject> bluePrefabs = new List<GameObject>();
 
         public int[,] regionMap;
+        [Range(0f, 100f)]
+        public float spawnPercentage;
+
 
         int recDepth = 0;
         public int greenObject = 0;
@@ -72,7 +75,7 @@ namespace Assets.Scripts.Manager
 
         private void PopulateRegions()
         {
-            foreach(SpawnRegion reg in regions)
+            foreach (SpawnRegion reg in regions)
             {
                 GameObject regionObject = new GameObject();
                 regionObject.name = $"Region #{regions.IndexOf(reg)}";
@@ -82,15 +85,16 @@ namespace Assets.Scripts.Manager
                     continue;
 
                 int size = reg.colorCord.Count;
-                int maxSpawns = (int)(((float)size / 100)*3);
+                float per = (spawnPercentage / 100);
+                int maxSpawns = (int)(((float)size * per));
                 int spawnCount = 0;
-                while(spawnCount < maxSpawns)
+                while (spawnCount < maxSpawns)
                 {
                     KeyValuePair<Vector2, Color> point = reg.colorCord.ElementAt(UnityEngine.Random.Range(0, reg.colorCord.Count));
                     Vector3 spawnPoint = new Vector3(point.Key.x, 0, point.Key.y);
                     spawnPoint.y = Terrain.activeTerrain.SampleHeight(spawnPoint);
-                    if(SpawnResourceOfColor(point.Value, spawnPoint, regionObject))
-                        spawnCount++;
+                    SpawnResourceOfColor(point.Value, spawnPoint, regionObject);
+                    spawnCount++;
                 }
 
             }
@@ -150,23 +154,24 @@ namespace Assets.Scripts.Manager
 
         private void DrawRegions(Color[,] colorMap)
         {
-            for(int x = 0; x < colorMap.GetLength(0); x++)
+            for (int x = 0; x < colorMap.GetLength(0); x++)
             {
-                for(int z = 0; z < colorMap.GetLength(1); z++)
+                for (int z = 0; z < colorMap.GetLength(1); z++)
                 {
 
-                    if (!HasColor(colorMap[x, z])) { 
-                        regionMap[x,z] = 0;
+                    if (!HasColor(colorMap[x, z]))
+                    {
+                        regionMap[x, z] = 0;
                         continue;
                     }
 
-                    if(regionMap[x,z] == 0)
+                    if (regionMap[x, z] == 0)
                     {
-                        Color c = colorMap[x,z];
+                        Color c = colorMap[x, z];
 
                         if (HasColor(c))
                         {
-                            CreateNewRegion(colorMap,x, z);
+                            CreateNewRegion(colorMap, x, z);
                         }
                     }
                     else
@@ -183,7 +188,7 @@ namespace Assets.Scripts.Manager
             SpawnRegion region = new SpawnRegion();
             regions.Add(region);
             List<Vector2> connectedPoints = new List<Vector2>();
-            connectedPoints.Add(new Vector2(x,z));
+            connectedPoints.Add(new Vector2(x, z));
             //FindNextPoint(connectedPoints, region, colorMap, x, z);
 
 
@@ -201,11 +206,11 @@ namespace Assets.Scripts.Manager
 
         void AddConnectedPoints(List<Vector2> con, Color[,] colorMap, int x, int z)
         {
-            if (IsValidPoint((x+1),z, colorMap, con))
+            if (IsValidPoint((x + 1), z, colorMap, con))
                 con.Add(new Vector2(x + 1, z));
             if (IsValidPoint((x - 1), z, colorMap, con))
                 con.Add(new Vector2(x - 1, z));
-            if (IsValidPoint(x, (z+1), colorMap, con))
+            if (IsValidPoint(x, (z + 1), colorMap, con))
                 con.Add(new Vector2(x, z + 1));
             if (IsValidPoint(x, (z - 1), colorMap, con))
                 con.Add(new Vector2(x, z - 1));
@@ -225,7 +230,7 @@ namespace Assets.Scripts.Manager
 
             return valid;
         }
-           
+
 
         private bool IsInBounds(int x, int z, Color[,] color)
         {
@@ -249,11 +254,11 @@ namespace Assets.Scripts.Manager
 
             Color[,] colors = new Color[texture.width, texture.height];
 
-            for(int i = 0; i < c.Length; i++)
+            for (int i = 0; i < c.Length; i++)
             {
                 colors[x, z] = c[i];
                 x++;
-                if(x == texture.width)
+                if (x == texture.width)
                 {
                     z++;
                     x = 0;
@@ -264,9 +269,9 @@ namespace Assets.Scripts.Manager
 
         private void OnDrawGizmos()
         {
-            foreach(SpawnRegion region in regions)
+            foreach (SpawnRegion region in regions)
             {
-                foreach(KeyValuePair<Vector2, Color> point in region.colorCord)
+                foreach (KeyValuePair<Vector2, Color> point in region.colorCord)
                 {
                     Gizmos.color = point.Value;
                     Vector3 nPoint = new Vector3(point.Key.x, 1, point.Key.y);
@@ -280,7 +285,7 @@ namespace Assets.Scripts.Manager
 
     public class SpawnRegion
     {
-        public Dictionary<Vector2, Color> colorCord=    new Dictionary<Vector2, Color>();
+        public Dictionary<Vector2, Color> colorCord = new Dictionary<Vector2, Color>();
         public List<GameObject> spawnedResources = new List<GameObject>();
     }
 }

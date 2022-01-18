@@ -1,0 +1,56 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+RWTexture2D<float4> Result;
+
+int sizeX;
+int sizeZ;
+
+
+float3 RegionArray[sizeX*sizeZ];
+int lastIndex = 0;
+int lastRegion = 1;
+
+
+void SearchConnectedPoints(int x, int y, float4 color)
+{
+
+}
+
+void BFS()
+{
+
+
+    int clearMap[sizeX * sizeZ];
+
+    int x = 0; 
+
+    for(int i = 0; i < sizeX*sizeZ;i++)
+    {
+        int s = clearMap[i];
+
+        if (s == 0)
+        {
+            lastIndex += 1;
+            ///RegionArray[lastIndex] = new float3(lastRegion, x, z);
+            //SearchConectedPoints()
+        }
+
+    }
+    
+
+}
+
+
+
+
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    // TODO: insert actual code here!
+
+    Result[id.xy] = float4(id.x & id.y, (id.x & 15)/15.0, (id.y & 15)/15.0, 0.0);
+}
