@@ -13,5 +13,7 @@ namespace Assets.Scripts.UI.Window
         public virtual void OnOpen() { }
         public virtual void OnClose() { }
 
+        public virtual void OnReload() { }
+
     }
 }

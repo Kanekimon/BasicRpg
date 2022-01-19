@@ -67,14 +67,79 @@
     "ResourceType": 0,
     "EquipmentType": 0,
     "ItemTypes": []
-  },  
+  },
   {
     "Id": 6,
     "Name": "Axe",
     "Sprite": "Sprites/axe",
     "Durability": 0.0,
     "ResourceType": 0,
-    "EquipmentType": 0,
+    "EquipmentType": 4,
     "ItemTypes": []
+  },
+  {
+    "Id": 7,
+    "Name": "Helmet",
+    "Sprite": "Sprites/helmet",
+    "Durability": 0.0,
+    "ResourceType": 0,
+    "EquipmentType": 8,
+    "ItemTypes": []
+  },
+  {
+    "Id": 8,
+    "Name": "Chest",
+    "Sprite": "Sprites/chest",
+    "Durability": 0.0,
+    "ResourceType": 0,
+    "EquipmentType": 16,
+    "ItemTypes": []
+  },
+  {
+    "Id": 9,
+    "Name": "Shoulder",
+    "Sprite": "Sprites/shoulder",
+    "Durability": 0.0,
+    "ResourceType": 0,
+    "EquipmentType": 32,
+    "ItemTypes": []
+  },
+  {
+    "Id": 10,
+    "Name": "Pants",
+    "Sprite": "Sprites/pants",
+    "Durability": 0.0,
+    "ResourceType": 0,
+    "EquipmentType": 64,
+    "ItemTypes": []
+  },
+  {
+    "Id": 11,
+    "Name": "Boots",
+    "Sprite": "Sprites/boots",
+    "Durability": 0.0,
+    "ResourceType": 0,
+    "EquipmentType": 128,
+    "ItemTypes": []
+  },
+  {
+    "Id": 12,
+    "Name": "Shield",
+    "Sprite": "Sprites/shield",
+    "Durability": 0.0,
+    "ResourceType": 0,
+    "EquipmentType": 2,
+    "ItemTypes": []
+  },
+  {
+    "Id": 13,
+    "Name": "Apple",
+    "Sprite": "Sprite/apple",
+    "Durability": 0.0,
+    "ResourceType": 16,
+    "EquipmentType": 1,
+    "ItemTypes": [
+      16
+    ]
   }
 ]

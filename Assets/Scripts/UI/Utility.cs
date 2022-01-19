@@ -37,7 +37,13 @@ namespace Assets.Scripts.UI
 
 
             slotObject.GetComponent<PanelClick>().itemId = item.Id;
-            slotObject.GetComponent<PanelClick>().clickHandler = (()=>clickAction());
+            slotObject.GetComponent<PanelClick>().leftHandler = (()=>clickAction());
+            //slotObject.GetComponent<PanelClick>().doubleLeftHandler = (()=>clickAction());
+            slotObject.GetComponent<PanelClick>().rightHandler = (() => {
+                UiManager.Instance.OpenContextMenu(item);
+            });
+
+            slotObject.GetComponent<PanelHover>().Text = item.Name;
 
             slotObject.transform.Find("Item_icon").GetComponent<Image>().sprite = Resources.Load<Sprite>(item.Sprite);
             slotObject.transform.Find("Item_amount").gameObject.GetComponent<Text>().text = amount.ToString();

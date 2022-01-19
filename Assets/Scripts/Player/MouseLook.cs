@@ -62,9 +62,14 @@ namespace Assets.Scripts.Player
         {
             Cursor.lockState = mode;
             if (mode == CursorLockMode.Locked)
+            {
                 IsLocked = true;
+            }
             else
+            {
                 IsLocked = false;
+            }
+            Cursor.visible = !IsLocked;
         }
 
     }

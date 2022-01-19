@@ -10,11 +10,18 @@ namespace Assets.Scripts.Manager
 {
     public class ResourceMapManager : MonoBehaviour
     {
+        public static ResourceMapManager Instance;
+
+
+
 
         Texture2D texture;
         public List<GameObject> redPrefabs = new List<GameObject>();
         public List<GameObject> greenPrefabs = new List<GameObject>();
         public List<GameObject> bluePrefabs = new List<GameObject>();
+
+
+
 
         public int[,] regionMap;
         [Range(0f, 100f)]
@@ -32,6 +39,12 @@ namespace Assets.Scripts.Manager
 
         private void Awake()
         {
+            if (Instance == null)
+                Instance = this;
+            else
+                Destroy(this);
+
+
             map["r"] = redPrefabs;
             map["g"] = greenPrefabs;
             map["b"] = bluePrefabs;
@@ -40,10 +53,7 @@ namespace Assets.Scripts.Manager
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.M))
-            {
-                SpawnResources();
-            }
+
         }
 
         private void LoadResourceMap()
@@ -176,7 +186,7 @@ namespace Assets.Scripts.Manager
                     }
                     else
                     {
-                        Debug.Log("is already filled out");
+                        
                     }
                 }
             }
@@ -239,7 +249,7 @@ namespace Assets.Scripts.Manager
 
         private bool HasColor(Color c)
         {
-            return c.r != 0 || c.g != 0 || c.b != 0;
+            return (c.r != 0 || c.g != 0 || c.b != 0) && c.a > 0;
         }
 
         private bool InRegionMap(int[,] regionmap, int x, int z)

@@ -5,8 +5,11 @@ using UnityEngine;
 [System.Serializable]
 public class AttributeComponent : MonoBehaviour
 {
+    [SerializeField]
     protected string _name;
+    [SerializeField]
     protected float _value;
+    [SerializeField]
     protected float _maxValue;
 
     public string Name { get { return _name; } }   

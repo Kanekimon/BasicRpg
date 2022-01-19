@@ -29,14 +29,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            _player.GetComponent<AttributeSystem>().DecreaseAttributeValue("health", 10f);
-        }
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            _player.GetComponent<AttributeSystem>().IncreaseAttributeValue("health", 10f);
-        }
 
     }
 

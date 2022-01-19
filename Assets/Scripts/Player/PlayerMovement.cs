@@ -1,3 +1,4 @@
+using Assets.Scripts.Manager;
 using UnityEngine;
 
 namespace Assets.Scripts.Player
@@ -21,13 +22,15 @@ namespace Assets.Scripts.Player
         // Update is called once per frame
         void Update()
         {
-
+           
             ApplyPhysics();
+            if (!ChatManager.Instance.isChatOpen)
+            {
+                Move();
 
-            Move();
-
-            if (Input.GetButtonDown("Jump") && isGrounded)
-                Jump();
+                if (Input.GetButtonDown("Jump") && isGrounded)
+                    Jump();
+            }
         }
 
 

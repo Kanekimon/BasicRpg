@@ -1,4 +1,5 @@
 using Assets.Scripts.Entity.Item;
+using Assets.Scripts.Manager;
 using System;
 using System.Collections;
 using System.Collections.Generic;

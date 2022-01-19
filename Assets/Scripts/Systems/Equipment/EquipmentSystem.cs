@@ -15,8 +15,17 @@ namespace Assets.Scripts.Systems.Equipment
 
         private void Awake()
         {
-            
+            _equipped = new Dictionary<EquipmentType, ItemData>();
+            _equipped.Add(EquipmentType.lefthand, null);
+            _equipped.Add(EquipmentType.righthand, null);
+            _equipped.Add(EquipmentType.helmet, null);
+            _equipped.Add(EquipmentType.chest, null);
+            _equipped.Add(EquipmentType.shoulder, null);
+            _equipped.Add(EquipmentType.pants, null);
+            _equipped.Add(EquipmentType.boots, null);
         }
+
+        public Dictionary<EquipmentType,ItemData> Equipped { get { return _equipped; } }
 
         /// <summary>
         /// Equips a given item, and returns the item equipped before
@@ -52,7 +61,10 @@ namespace Assets.Scripts.Systems.Equipment
         /// <returns></returns>
         public ItemData UnequipItem(EquipmentType slot)
         {
-            return _equipped[slot] ?? null;
+            ItemData old = _equipped[slot];
+
+            _equipped[slot] = null;
+            return old;
         }
 
 

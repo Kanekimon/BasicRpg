@@ -1,5 +1,6 @@
 using Assets.Scripts.Entity.Item;
 using Assets.Scripts.Manager;
+using Assets.Scripts.Systems.Equipment;
 using Assets.Scripts.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,7 +15,8 @@ public class UiManager : MonoBehaviour
 
     public RectTransform inventory;
     public RectTransform crafting;
-
+    public GameObject contextMenu;
+    public GameObject hoverMenu;
 
 
     public List<RectTransform> windows = new List<RectTransform>();
@@ -37,35 +39,102 @@ public class UiManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            WindowManager.Instance.OpenWindow("Inventory");
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            WindowManager.Instance.OpenWindow("Crafting");
-        }
-
     }
 
-    private RectTransform GetWindow(string name)
-    {
-        foreach (RectTransform rect in windows)
-        {
-            if (rect.name.Equals(name))
-                return rect;
-        }
-        return null;
-    }
 
     public GameObject GetCanvas()
     {
-        return GameObject.Find("Canvas");
+        return GameObject.Find("UI");
     }
 
     public GameObject GetNotificationContainer()
     {
         return GameObject.Find("NotificationContainer");
+    }
+
+    public void OpenContextMenu(ItemData item, bool equipped = false, EquipmentType slot = EquipmentType.none)
+    {
+        contextMenu.SetActive(true);
+
+        Vector3 mousePos = Input.mousePosition;
+        mousePos.x += 100;
+        contextMenu.transform.position = mousePos;
+
+        if (equipped)
+        {
+            contextMenu.transform.Find("Unequip").gameObject.SetActive(true);
+            contextMenu.transform.Find("Unequip").GetComponent<PanelClick>().leftHandler = (() =>
+            {
+
+                ItemData unequipped = GameManager.Instance.GetPlayer().GetComponent<EquipmentSystem>().UnequipItem(slot);
+                if(unequipped != null)
+                    GameManager.Instance.GetPlayer().GetComponent<InventorySystem>().AddItemToInventory(unequipped, 1);
+                WindowManager.Instance.GetCurrentActive().OnReload();
+                UiManager.Instance.CloseContextMenu();
+            });
+        }
+        else
+        {
+
+            contextMenu.transform.Find("Drop").GetComponent<PanelClick>().leftHandler = (() =>
+            {
+                GameManager.Instance.GetPlayer().GetComponent<InventorySystem>().RemoveAllFromId(item.Id);
+                UiManager.Instance.CloseContextMenu();
+                WindowManager.Instance.GetCurrentActive().OnReload();
+            });
+
+            if (item.EquipmentType != EquipmentType.none)
+            {
+                contextMenu.transform.Find("Equip").gameObject.SetActive(true);
+                contextMenu.transform.Find("Equip").GetComponent<PanelClick>().leftHandler = (() =>
+                {
+                    GameManager.Instance.GetPlayer().GetComponent<InventorySystem>().RemoveSpecificAmountFromId(item.Id, 1);
+                    GameManager.Instance.GetPlayer().GetComponent<EquipmentSystem>().EquipItem(item);
+                    WindowManager.Instance.GetCurrentActive().OnReload();
+                    UiManager.Instance.CloseContextMenu();
+                });
+            }
+            if (item.ItemTypes.Contains(ItemType.consumable))
+            {
+                contextMenu.transform.Find("Use").GetComponent<PanelClick>().leftHandler = (() =>
+                {
+                    GameManager.Instance.GetPlayer().GetComponent<InventorySystem>().RemoveSpecificAmountFromId(item.Id, 1);
+                    WindowManager.Instance.GetCurrentActive().OnReload();
+                    UiManager.Instance.CloseContextMenu();
+                });
+            }
+        }
+        CloseHoverMenu();
+
+    }
+
+    public void CloseContextMenu()
+    {
+        foreach(Transform child in contextMenu.transform)
+        {
+            if(!child.name.Equals("Header"))
+                child.gameObject.SetActive(false);
+        }
+
+        contextMenu.SetActive(false);
+    }
+
+    public void OpenHoverMenu(string text)
+    {
+        if (!contextMenu.activeInHierarchy)
+        {
+            hoverMenu.SetActive(true);
+            Vector3 mousePos = Input.mousePosition;
+            mousePos.x += 100;
+
+            hoverMenu.transform.position = mousePos;
+            hoverMenu.transform.Find("Text").GetComponent<Text>().text = text;
+        }
+    }
+
+    public void CloseHoverMenu()
+    {
+        hoverMenu.SetActive(false);
     }
 
 

@@ -10,6 +10,7 @@ public enum ItemType
     resource = 1,
     equipment = 2,
     craftable = 4,
-    crafting_resource = 8
+    crafting_resource = 8,
+    consumable = 16
 }
 

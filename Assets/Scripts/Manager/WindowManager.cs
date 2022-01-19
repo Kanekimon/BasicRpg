@@ -14,12 +14,20 @@ namespace Assets.Scripts.Manager
         public bool IsWindowOpen = false;
         public GameObject slot;
 
+        public Dictionary<KeyCode, string> windowKeys = new Dictionary<KeyCode, string>();
+
         private void Awake()
         {
             if (Instance == null)
                 Instance = this;
             else
                 Destroy(this);
+        }
+
+        private void Update()
+        {
+            if(_currentActiveWindow != null && Input.GetKeyDown(KeyCode.Escape))
+                CloseWindow(_currentActiveWindow);
         }
 
 
@@ -57,7 +65,14 @@ namespace Assets.Scripts.Manager
             IsWindowOpen=false;
             _currentActiveWindow.gameObject.SetActive(false);
             _currentActiveWindow = null;
+            UiManager.Instance.CloseContextMenu();
+            UiManager.Instance.CloseHoverMenu();
             GameManager.Instance.ToggleCursor(CursorLockMode.Locked);
+        }
+
+        public UiWindow GetCurrentActive()
+        {
+            return _currentActiveWindow;
         }
     }
 }
