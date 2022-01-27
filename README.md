@@ -6,7 +6,7 @@
  Current plans for the project:
  
 <ul>
- <li>Base functionalities  //----------------------------------------------------
+ <li>Base functionalities  #----------------------------------------------------
   <ul>
    <li>UI System
     <ul>
