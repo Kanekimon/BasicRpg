@@ -6,5 +6,8 @@
  Current plans for the project:
  
  <ul>
- <li>Test</li>
+ <li>Base functionalities
+  <ul>
+   <li>UI System</li>
+ </li>
  </ul>
