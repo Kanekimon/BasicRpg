@@ -34,6 +34,13 @@
       <li>NPC Fighting</li>
      </ul>
     </li>
+    <li> Enemy NPC
+     <ul>
+      <li>Target Player</li>
+      <li>Target other NPC</li>
+      <li>Chase</li>
+     </ul>
+    </li>
    </ul>
   </li>
 </li>
