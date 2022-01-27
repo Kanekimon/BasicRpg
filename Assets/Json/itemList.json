@@ -75,7 +75,9 @@
     "Durability": 0.0,
     "ResourceType": 0,
     "EquipmentType": 4,
-    "ItemTypes": []
+    "ItemTypes": [
+      2
+    ]
   },
   {
     "Id": 7,
@@ -84,7 +86,9 @@
     "Durability": 0.0,
     "ResourceType": 0,
     "EquipmentType": 8,
-    "ItemTypes": []
+    "ItemTypes": [
+      2
+    ]
   },
   {
     "Id": 8,
@@ -93,7 +97,9 @@
     "Durability": 0.0,
     "ResourceType": 0,
     "EquipmentType": 16,
-    "ItemTypes": []
+    "ItemTypes": [
+      2
+    ]
   },
   {
     "Id": 9,
@@ -102,7 +108,9 @@
     "Durability": 0.0,
     "ResourceType": 0,
     "EquipmentType": 32,
-    "ItemTypes": []
+    "ItemTypes": [
+      2
+    ]
   },
   {
     "Id": 10,
@@ -111,7 +119,9 @@
     "Durability": 0.0,
     "ResourceType": 0,
     "EquipmentType": 64,
-    "ItemTypes": []
+    "ItemTypes": [
+      2
+    ]
   },
   {
     "Id": 11,
@@ -120,7 +130,9 @@
     "Durability": 0.0,
     "ResourceType": 0,
     "EquipmentType": 128,
-    "ItemTypes": []
+    "ItemTypes": [
+      2
+    ]
   },
   {
     "Id": 12,
@@ -129,7 +141,9 @@
     "Durability": 0.0,
     "ResourceType": 0,
     "EquipmentType": 2,
-    "ItemTypes": []
+    "ItemTypes": [
+      2
+    ]
   },
   {
     "Id": 13,

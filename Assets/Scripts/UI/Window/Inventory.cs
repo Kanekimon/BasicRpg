@@ -36,7 +36,7 @@ namespace Assets.Scripts.UI.Window
         private void DrawItems(Dictionary<ItemData, int> items)
         {
             Utility.DeleteAllChildrenFromTransform(this.transform.Find("Inventory_Items"));
-            int slot_index = 0;
+
             foreach (KeyValuePair<ItemData, int> item in items)
             {
                 Utility.AddSlot(slotContainer, item.Key, item.Value);
@@ -91,6 +91,8 @@ namespace Assets.Scripts.UI.Window
         public override void OnReload()
         {
             base.OnReload();
+            UiManager.Instance.CloseHoverMenu();
+            UiManager.Instance.CloseContextMenu();
             OnOpen();
         }
 

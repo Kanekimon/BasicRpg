@@ -18,9 +18,8 @@ namespace Assets.Scripts.UI
         public ClickHandling rightHandler;
         public ClickHandling doubleLeftHandler;
 
-        public float doubleClickThreshold = 0.2f;
-        private float lastClickTime = -1;
-
+        float lastClick = 0f;
+        float interval = 0.4f;
 
         public void OnPointerClick(PointerEventData eventData)
         {
@@ -28,22 +27,30 @@ namespace Assets.Scripts.UI
 
             if (eventData.button == PointerEventData.InputButton.Left)
             {
-                if (Time.time - lastClickTime < doubleClickThreshold)
+                if ((lastClick + interval) > Time.time)
                 {
                     if (doubleLeftHandler != null)
                         doubleLeftHandler();
                 }
                 else
                 {
-                    if (leftHandler != null)
+                    if (leftHandler != null && !Dragging()) 
                         leftHandler();
                 }
-                lastClickTime = Time.time;
+                lastClick = Time.time;
 
             }
             else if (eventData.button == PointerEventData.InputButton.Right && rightHandler != null)
                 rightHandler();
+
+
+            UiManager.Instance.SetLastClicked(this.gameObject);
             //UiManager.Instance.ShowItemInfo(ItemManager.Instance.GetItemById(itemId));
+        }
+
+        bool Dragging()
+        {
+            return this.gameObject.GetComponent<Dragable>() != null && this.gameObject.GetComponent<Dragable>().IsDragging;
         }
     }
 }

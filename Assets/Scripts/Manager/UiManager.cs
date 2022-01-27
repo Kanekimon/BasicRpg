@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UiManager : MonoBehaviour
+public class UiManager : MonoBehaviour, IPointerClickHandler
 {
     public static UiManager Instance;
 
@@ -18,6 +18,7 @@ public class UiManager : MonoBehaviour
     public GameObject contextMenu;
     public GameObject hoverMenu;
 
+    public GameObject clickTarget;
 
     public List<RectTransform> windows = new List<RectTransform>();
 
@@ -39,6 +40,8 @@ public class UiManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
     }
 
 
@@ -137,5 +140,19 @@ public class UiManager : MonoBehaviour
         hoverMenu.SetActive(false);
     }
 
+    public void SetLastClicked(GameObject last)
+    {
+        clickTarget = last;
 
+
+        if (contextMenu.activeInHierarchy && !clickTarget.name.ToLower().Contains("slot"))
+        {
+            CloseContextMenu();
+        }
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        SetLastClicked(eventData.pointerClick);
+    }
 }

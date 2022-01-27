@@ -1,5 +1,7 @@
 ﻿using Assets.Scripts.Entity.Item;
 using Assets.Scripts.Manager;
+using Assets.Scripts.Player;
+using Assets.Scripts.Systems.Equipment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,9 +39,13 @@ namespace Assets.Scripts.UI
 
 
             slotObject.GetComponent<PanelClick>().itemId = item.Id;
-            slotObject.GetComponent<PanelClick>().leftHandler = (()=>clickAction());
-            //slotObject.GetComponent<PanelClick>().doubleLeftHandler = (()=>clickAction());
-            slotObject.GetComponent<PanelClick>().rightHandler = (() => {
+            if (clickAction != null)
+                slotObject.GetComponent<PanelClick>().leftHandler = (() => clickAction());
+
+            AddDoubleLeftHandler(item, slotObject.GetComponent<PanelClick>());
+
+            slotObject.GetComponent<PanelClick>().rightHandler = (() =>
+            {
                 UiManager.Instance.OpenContextMenu(item);
             });
 
@@ -47,6 +53,32 @@ namespace Assets.Scripts.UI
 
             slotObject.transform.Find("Item_icon").GetComponent<Image>().sprite = Resources.Load<Sprite>(item.Sprite);
             slotObject.transform.Find("Item_amount").gameObject.GetComponent<Text>().text = amount.ToString();
+        }
+
+        static void AddDoubleLeftHandler(ItemData item, PanelClick pc)
+        {
+            if (item.ItemTypes.Contains(ItemType.equipment))
+            {
+                pc.doubleLeftHandler = (() =>
+                {
+                    GameObject player = GameManager.Instance.GetPlayer();
+                    player.GetComponent<EquipmentSystem>().EquipItem(item);
+                    player.GetComponent<InventorySystem>().RemoveSpecificAmountFromId(item.Id, 1);
+                    WindowManager.Instance.GetCurrentActive().OnReload();
+                });
+            }
+            if (item.ItemTypes.Contains(ItemType.consumable))
+                pc.doubleLeftHandler = (() => ConsumeItem(item));
+
+        }
+
+        static void AddEquipOption(ItemData item)
+        {
+
+        }
+        static void ConsumeItem(ItemData item)
+        {
+            //GameManager.Instance.GetPlayer().GetComponent<InventorySystem>()
         }
 
     }

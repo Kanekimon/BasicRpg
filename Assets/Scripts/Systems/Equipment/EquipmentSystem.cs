@@ -50,6 +50,8 @@ namespace Assets.Scripts.Systems.Equipment
             _equipped[item.EquipmentType] = item;
 
 
+            
+
             return oldItem;
         }
 
